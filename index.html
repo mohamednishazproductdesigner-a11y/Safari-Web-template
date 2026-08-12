@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0B0705" />
+  <title>SAFARI — Break Into Crunch | Gandour</title>
+  <meta name="description" content="Wafer, golden caramel and crisped rice enrobed in milk chocolate. The Gandour classic that has been snapping since 1857." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="preload" as="image" href="/seq/break/0001.webp" />
+  <link rel="preload" as="image" href="/img/logo-3d.webp" />
+</head>
+<body>
+
+  <!-- ============ PRELOADER ============ -->
+  <div id="preloader" class="preloader">
+    <div class="preloader__inner">
+      <img class="preloader__logo" src="/img/logo-3d.webp" alt="Safari" />
+      <div class="preloader__bar"><span class="preloader__fill"></span></div>
+      <div class="preloader__meta">
+        <span class="preloader__label">Unwrapping</span>
+        <span class="preloader__pct">0%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ NAV ============ -->
+  <header class="nav" id="nav">
+    <a class="nav__brand" href="#top">
+      <img src="/img/logo-3d.webp" alt="Safari" />
+      <span class="nav__by">by Gandour</span>
+    </a>
+    <nav class="nav__links">
+      <a href="#anatomy">Inside</a>
+      <a href="#craving">The moment</a>
+      <a href="#flavours">Flavours</a>
+      <a href="#moments">Moments</a>
+      <a href="#story">Story</a>
+    </nav>
+    <a class="nav__cta" href="#flavours"><span>Find a bar</span></a>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="top">
+    <div class="hero__pin">
+      <div class="hero__bg" aria-hidden="true">
+        <div class="hero__glow hero__glow--cool"></div>
+        <div class="hero__glow hero__glow--warm"></div>
+        <div class="hero__shock"></div>
+      </div>
+
+      <!-- giant wordmark: fills with the logo's gold as you scroll, then
+           snaps in two with the bar -->
+      <div class="hero__mark" aria-hidden="true">
+        <div class="hero__mark-half hero__mark-half--l">
+          <span class="hero__mark-word">
+            <img class="hero__mark-img hero__mark-img--ghost" src="/img/logo-3d.webp" alt="" />
+            <img class="hero__mark-img hero__mark-img--fill" src="/img/logo-3d.webp" alt="" />
+          </span>
+        </div>
+        <div class="hero__mark-half hero__mark-half--r">
+          <span class="hero__mark-word">
+            <img class="hero__mark-img hero__mark-img--ghost" src="/img/logo-3d.webp" alt="" />
+            <img class="hero__mark-img hero__mark-img--fill" src="/img/logo-3d.webp" alt="" />
+          </span>
+        </div>
+      </div>
+
+      <canvas class="hero__canvas" id="heroCanvas"></canvas>
+
+      <div class="hero__copy">
+        <p class="hero__eyebrow"><span class="dot"></span>Gandour · Middle East original</p>
+
+        <div class="hero__beats">
+          <div class="beat is-active" data-beat="0">
+            <h1 class="beat__title">Every bar has a<br /><em>breaking point.</em></h1>
+            <p class="beat__sub">Scroll to find it.</p>
+          </div>
+          <div class="beat" data-beat="1">
+            <h1 class="beat__title">SNAP.</h1>
+            <p class="beat__sub">Four layers. One unmistakable sound.</p>
+          </div>
+          <div class="beat" data-beat="2">
+            <h1 class="beat__title">That&nbsp;pull.<br /><em>That crunch.</em></h1>
+            <p class="beat__sub">Golden caramel, stretched between two halves of childhood.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__rail" aria-hidden="true">
+        <span class="hero__rail-fill"></span>
+      </div>
+
+      <div class="hero__cue" aria-hidden="true">
+        <span class="hero__cue-line"></span>
+        <span class="hero__cue-text">Scroll</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ANATOMY ============ -->
+  <section class="anatomy" id="anatomy">
+    <div class="anatomy__pin">
+      <header class="anatomy__head">
+        <p class="kicker">02 — Anatomy</p>
+        <h2 class="anatomy__title">Built in four layers</h2>
+      </header>
+
+      <div class="anatomy__stage">
+        <img class="anatomy__bar" src="/img/bar-open.webp" alt="Safari bar broken open, showing wafer, caramel and crisped rice layers" />
+        <div class="anatomy__pins" id="anatomyPins"></div>
+      </div>
+
+      <p class="anatomy__foot">Milk chocolate with cocoa solids 25% minimum.</p>
+    </div>
+  </section>
+
+  <!-- ============ CRAVING — film that opens up on scroll ============ -->
+  <section class="craving" id="craving">
+    <div class="craving__pin">
+      <div class="craving__glow" aria-hidden="true"></div>
+      <div class="craving__stage" id="cravingStage">
+        <video
+          class="craving__video"
+          id="cravingVideo"
+          autoplay muted loop playsinline preload="auto"
+          poster="/video/craving-poster.webp"
+          aria-label="Safari &quot;Tattoo&quot; commercial — a bar left on a desk gets taken and unwrapped">
+          <source src="/video/craving.webm" type="video/webm" />
+          <source src="/video/craving.mp4" type="video/mp4" />
+        </video>
+        <div class="craving__scrim" aria-hidden="true"></div>
+      </div>
+
+      <div class="craving__copy">
+        <p class="kicker">03 — The craving</p>
+        <div class="craving__beats">
+          <div class="cbeat" data-cbeat="0">
+            <h2 class="cbeat__title">It was just<br /><em>sitting there.</em></h2>
+            <p class="cbeat__sub">Nobody in that room stood a chance.</p>
+          </div>
+          <div class="cbeat" data-cbeat="1">
+            <h2 class="cbeat__title">Then it<br /><em>wasn't.</em></h2>
+            <p class="cbeat__sub">Two seconds. One decision. No regrets.</p>
+          </div>
+          <div class="cbeat" data-cbeat="2">
+            <h2 class="cbeat__title">Wrapper off.</h2>
+            <p class="cbeat__sub">This is the part everybody remembers.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="craving__hud" aria-hidden="true">
+        <span class="craving__live"><i></i>Now playing</span>
+        <span class="craving__credit">Gandour Safari — “Tattoo”</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FLAVOURS (generated) ============ -->
+  <section class="flavours" id="flavours">
+    <div class="flavours__intro">
+      <p class="kicker">04 — The range</p>
+      <h2 class="flavours__title">Pick your <em>crunch</em></h2>
+      <p class="flavours__lede">Same snap. Different obsession. Keep scrolling — each wrapper tears itself open.</p>
+    </div>
+    <div id="flavourList"></div>
+  </section>
+
+  <!-- ============ MOMENTS — poster campaign ============ -->
+  <section class="posters" id="moments">
+    <div class="posters__head">
+      <p class="kicker">05 — The campaign</p>
+      <h2 class="posters__title">Have your every <em>happy</em><br />with Safari</h2>
+      <p class="posters__lede">
+        One bar, every occasion worth a snap. Out-of-home, in-store and social — one green
+        wrapper doing the talking.
+      </p>
+    </div>
+
+    <div class="posters__marquee" aria-hidden="true">
+      <div class="posters__track">
+        <span>EVERY HAPPY</span><i></i><span>EVERY SNAP</span><i></i><span>EVERY SAFARI</span><i></i>
+        <span>EVERY HAPPY</span><i></i><span>EVERY SNAP</span><i></i><span>EVERY SAFARI</span><i></i>
+      </div>
+    </div>
+
+    <div class="posters__grid" id="posterGrid"></div>
+  </section>
+
+  <!-- ============ STORY / OUTRO ============ -->
+  <section class="outro" id="story">
+    <div class="outro__inner">
+      <p class="kicker">06 — Since 1857</p>
+      <h2 class="outro__title">A wrapper you'd<br /><em>recognise blindfolded.</em></h2>
+      <p class="outro__body">
+        Safari has been made by Gandour for generations of kids across the Middle East — the green
+        wrapper in the corner shop, the one that came back from every trip in someone's bag. Wafer,
+        caramel and crisped rice under milk chocolate. Nothing about it needed changing.
+      </p>
+      <div class="outro__marquee" aria-hidden="true">
+        <div class="outro__track">
+          <span>SNAP</span><i></i><span>CRUNCH</span><i></i><span>PULL</span><i></i><span>REPEAT</span><i></i>
+          <span>SNAP</span><i></i><span>CRUNCH</span><i></i><span>PULL</span><i></i><span>REPEAT</span><i></i>
+        </div>
+      </div>
+    </div>
+    <footer class="footer">
+      <span>SAFARI® is a registered trademark of Gandour.</span>
+      <span>Concept site · Built for demonstration</span>
+    </footer>
+  </section>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

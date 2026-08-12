@@ -1,0 +1,257 @@
+/* ============================================================
+   Flavours — each wrapper tears open on scroll
+   ============================================================ */
+
+.flavours { position: relative; }
+
+.flavours__intro {
+  min-height: 70svh;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: 1rem;
+  padding: clamp(5rem, 14vh, 9rem) var(--gutter);
+  background:
+    radial-gradient(90% 70% at 50% 100%, rgba(18, 165, 81, 0.14), transparent 65%),
+    var(--cocoa-900);
+}
+.flavours__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.4rem, 8vw, 6rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+}
+.flavours__lede {
+  max-width: 46ch;
+  margin: 0 auto;
+  color: var(--cream-dim);
+}
+
+/* ---------------- one flavour panel ---------------- */
+.flav {
+  position: relative;
+  height: 400vh;
+  /* per-flavour accent, set inline from data */
+  --accent: var(--green);
+  --accent-lit: var(--green-lit);
+}
+
+.flav__pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.flav__bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(100% 80% at 50% 46%, color-mix(in srgb, var(--accent) 34%, transparent), transparent 62%),
+    var(--cocoa-900);
+  will-change: opacity;
+}
+
+/* huge ghosted index number */
+.flav__index {
+  position: absolute;
+  right: var(--gutter);
+  bottom: -0.16em;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(9rem, 30vw, 26rem);
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(246, 237, 224, 0.09);
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* ---- the stage where the wrapper tears ---- */
+.flav__stage {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 44%;
+  translate: -50% -50%;
+  width: min(96vw, 1240px);
+  aspect-ratio: 1900 / 540;
+  display: grid;
+  place-items: center;
+}
+
+/* the bar that is revealed underneath */
+.flav__bar {
+  position: absolute;
+  width: 58%;
+  height: auto;
+  opacity: 0;
+  scale: 0.86;
+  filter: drop-shadow(0 30px 70px rgba(0, 0, 0, 0.75));
+  will-change: transform, opacity, scale;
+}
+
+/* two halves of the same wrapper, torn down a jagged seam */
+.flav__half {
+  position: absolute;
+  inset: 0;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  filter: drop-shadow(0 26px 50px rgba(0, 0, 0, 0.6));
+  will-change: transform;
+}
+.flav__half--l {
+  clip-path: polygon(
+    0% 0%, 51% 0%, 48.4% 9%, 51.6% 18%, 47.8% 27%, 52.2% 36%,
+    48.2% 46%, 52.6% 55%, 47.6% 65%, 51.8% 74%, 48.6% 83%, 51% 92%, 49.4% 100%, 0% 100%
+  );
+}
+.flav__half--r {
+  clip-path: polygon(
+    51% 0%, 100% 0%, 100% 100%, 49.4% 100%, 51% 92%, 48.6% 83%, 51.8% 74%,
+    47.6% 65%, 52.6% 55%, 48.2% 46%, 52.2% 36%, 47.8% 27%, 51.6% 18%, 48.4% 9%
+  );
+}
+
+/* crumbs that puff out of the tear */
+.flav__crumbs {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.flav__crumb {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10px;
+  height: 7px;
+  border-radius: 40%;
+  background: var(--accent-lit);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* ---- info ---- */
+.flav__info {
+  position: absolute;
+  z-index: 3;
+  left: var(--gutter);
+  bottom: clamp(2.5rem, 8vh, 5rem);
+  max-width: min(46ch, 44vw);
+}
+.flav__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent-lit);
+}
+.flav__eyebrow::before {
+  content: "";
+  width: 26px;
+  height: 1px;
+  background: currentColor;
+}
+.flav__name {
+  margin: 0.7rem 0 0.5rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2rem, 5.2vw, 4.2rem);
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+}
+.flav__tag {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1rem, 1.8vw, 1.4rem);
+  color: var(--accent-lit);
+  margin-bottom: 0.9rem;
+}
+.flav__desc {
+  color: var(--cream-dim);
+  font-size: clamp(0.92rem, 1.1vw, 1.02rem);
+}
+
+.flav__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 1.2rem;
+  padding: 0;
+  list-style: none;
+}
+.flav__chips li {
+  padding: 0.38rem 0.8rem;
+  border: 1px solid var(--hair);
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+  background: rgba(246, 237, 224, 0.035);
+}
+
+.flav__stats {
+  display: flex;
+  gap: clamp(1.2rem, 3vw, 2.6rem);
+  margin-top: 1.6rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--hair);
+}
+.flav__stat b {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.3rem, 2.4vw, 2rem);
+  line-height: 1;
+  color: var(--accent-lit);
+}
+.flav__stat span {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.64rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+}
+
+/* children animate in individually */
+.flav__reveal { opacity: 0; }
+
+/* Desktop runs two columns — copy left, wrapper bleeding off the right —
+   so the revealed bar can never land on top of the story. */
+@media (min-width: 1001px) {
+  .flav__stage {
+    left: auto;
+    right: -6%;
+    top: 50%;
+    translate: 0 -50%;
+    width: min(58vw, 880px);
+  }
+  .flav__info {
+    top: 50%;
+    bottom: auto;
+    translate: 0 -50%;
+    max-width: 40ch;
+  }
+}
+
+@media (max-width: 1000px) {
+  .flav__stage { top: 36%; width: 108vw; }
+  .flav__bar { width: 66%; }
+  .flav__info { max-width: none; right: var(--gutter); }
+  .flav__index { font-size: clamp(7rem, 34vw, 14rem); opacity: 0.7; }
+}
+
+@media (max-width: 860px) {
+  .flav { height: 340vh; }
+  .flav__stats { gap: 1.2rem; }
+}

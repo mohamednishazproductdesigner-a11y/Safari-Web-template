@@ -1,0 +1,154 @@
+/* ============================================================
+   Anatomy — pinned callouts on the broken bar
+   ============================================================ */
+
+.anatomy {
+  position: relative;
+  height: 320vh;
+  background: var(--cocoa-900);
+}
+
+.anatomy__pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 1rem;
+  padding: clamp(4.5rem, 12vh, 7rem) var(--gutter) 2.5rem;
+  overflow: hidden;
+}
+
+.anatomy__pin::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(70% 60% at 50% 50%, rgba(232, 160, 32, 0.14), transparent 70%);
+  pointer-events: none;
+}
+
+.anatomy__head { text-align: center; position: relative; }
+.anatomy__title {
+  margin-top: 0.7rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.9rem, 5vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.anatomy__stage {
+  position: relative;
+  min-height: 0;
+}
+/* The image fills the stage and `contain` letterboxes it — JS derives the
+   real artwork box from naturalWidth/Height so the callouts stay glued on. */
+.anatomy__bar {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 40px 80px rgba(0, 0, 0, 0.7));
+  will-change: transform;
+}
+
+/* callout layer sits exactly over the image box */
+.anatomy__pins {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.pin {
+  position: absolute;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+.pin__dot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 11px;
+  height: 11px;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: var(--caramel-lit);
+  box-shadow: 0 0 0 4px rgba(255, 200, 97, 0.2), 0 0 24px 4px rgba(255, 170, 40, 0.6);
+}
+.pin__dot::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 200, 97, 0.55);
+  animation: pinPulse 2.6s var(--ease-out) infinite;
+}
+@keyframes pinPulse {
+  0%   { transform: scale(0.6); opacity: 0.9; }
+  70%  { transform: scale(2.2); opacity: 0; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.pin__line {
+  position: absolute;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 200, 97, 0.9), rgba(255, 200, 97, 0.25));
+  transform-origin: left center;
+}
+
+.pin__label {
+  position: absolute;
+  top: 0;
+  white-space: nowrap;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid rgba(255, 200, 97, 0.28);
+  border-radius: 10px;
+  background: rgba(20, 13, 9, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transform: translateY(-50%);
+}
+.pin__name {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(0.85rem, 1.4vw, 1.05rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+.pin__note {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--caramel);
+}
+
+/* left-anchored pins flip their label to the left of the line */
+.pin--left .pin__line {
+  transform-origin: right center;
+  background: linear-gradient(270deg, rgba(255, 200, 97, 0.9), rgba(255, 200, 97, 0.25));
+}
+.pin--left .pin__label { transform: translate(-100%, -50%); }
+
+.anatomy__foot {
+  text-align: center;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+  position: relative;
+}
+
+@media (max-width: 860px) {
+  .anatomy { height: 300vh; }
+  .pin__label { padding: 0.4rem 0.65rem; }
+  .pin__note { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pin__dot::after { animation: none; }
+}

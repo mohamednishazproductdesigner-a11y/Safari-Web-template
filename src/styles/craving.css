@@ -1,0 +1,148 @@
+/* ============================================================
+   Craving — the film autoplays small and centred, then opens
+   out to full bleed as you scroll past it
+   ============================================================ */
+
+.craving {
+  position: relative;
+  height: 360vh;
+  background: var(--cocoa-900);
+}
+
+.craving__pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--cocoa-900);
+}
+
+/* faint warmth behind the small state so it never floats on flat black */
+.craving__glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(58% 48% at 50% 50%, rgba(18, 165, 81, 0.2), transparent 70%);
+}
+
+/* ---------------- the film ----------------
+   The stage is sized so that scale(1) exactly covers the viewport at the
+   clip's 1920:970. Scrolling scales it up from a small centred card, so the
+   growth is one GPU transform — no width/height animation, no layout churn. */
+.craving__stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: max(100vw, 198svh);
+  aspect-ratio: 1920 / 970;
+  overflow: hidden;
+  transform-origin: center;
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.craving__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* only earns its keep once the film is full bleed and the copy sits on it */
+.craving__scrim {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(11, 7, 5, 0.6) 0%, transparent 20%),
+    linear-gradient(0deg, rgba(11, 7, 5, 0.82) 0%, rgba(11, 7, 5, 0.22) 22%, transparent 44%),
+    linear-gradient(90deg, rgba(11, 7, 5, 0.55) 0%, transparent 34%);
+}
+
+/* ---------------- copy ---------------- */
+.craving__copy {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  padding: calc(5.5rem + env(safe-area-inset-top)) var(--gutter) 6.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+.craving__copy .kicker {
+  position: absolute;
+  top: 6.5rem;
+  left: var(--gutter);
+}
+
+.craving__beats {
+  position: relative;
+  max-width: 32ch;
+  min-height: 11rem;
+}
+.cbeat {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+}
+.cbeat__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2rem, 5vw, 4.2rem);
+  line-height: 0.96;
+  letter-spacing: -0.035em;
+  text-shadow: 0 10px 60px rgba(0, 0, 0, 0.9);
+}
+.cbeat__sub {
+  margin-top: 0.9rem;
+  max-width: 32ch;
+  color: var(--cream-dim);
+  font-size: clamp(0.9rem, 1.1vw, 1.02rem);
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.95);
+}
+
+/* ---------------- hud ---------------- */
+.craving__hud {
+  position: absolute;
+  z-index: 3;
+  right: var(--gutter);
+  bottom: 2.4rem;
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+}
+.craving__live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--caramel);
+}
+.craving__live i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: ping 2.4s var(--ease-out) infinite;
+}
+
+@media (max-width: 860px) {
+  .craving { height: 320vh; }
+  .craving__copy .kicker { top: 5.2rem; }
+  .craving__beats { max-width: none; min-height: 9rem; }
+  .craving__credit { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .craving__live i { animation: none; }
+}

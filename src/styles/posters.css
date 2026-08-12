@@ -1,0 +1,224 @@
+/* ============================================================
+   Moments — the campaign wall + trade CTA
+   ============================================================ */
+
+.posters {
+  position: relative;
+  padding: clamp(6rem, 16vh, 11rem) var(--gutter) clamp(5rem, 12vh, 9rem);
+  background: var(--cocoa-900);
+}
+
+.posters__head {
+  max-width: var(--max);
+  margin: 0 auto clamp(2.5rem, 6vh, 4rem);
+  text-align: center;
+}
+.posters__title {
+  margin: 1rem 0 1.2rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.2rem, 6.4vw, 5rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+}
+.posters__lede {
+  max-width: 52ch;
+  margin: 0 auto;
+  color: var(--cream-dim);
+}
+
+/* ---- ticker between the header and the wall ---- */
+.posters__marquee {
+  overflow: hidden;
+  margin-bottom: clamp(2rem, 5vh, 3.5rem);
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--hair);
+  border-bottom: 1px solid var(--hair);
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+.posters__track {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  width: max-content;
+  animation: postersSlide 24s linear infinite;
+}
+.posters__track span {
+  font-family: "Anton", var(--font-display);
+  font-size: clamp(0.9rem, 1.6vw, 1.3rem);
+  letter-spacing: 0.08em;
+  color: var(--cream-faint);
+}
+.posters__track i {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--green-lit);
+}
+@keyframes postersSlide { to { transform: translateX(-50%); } }
+
+/* ---- the wall ---- */
+.posters__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: start;
+  gap: clamp(1rem, 2vw, 2rem);
+  max-width: var(--max);
+  margin: 0 auto;
+}
+
+/* ---- one card ----
+   Finished key visuals: the type is baked into the artwork, so the card
+   frames the poster rather than composing on top of it.
+
+   `.poster` is the perspective host and takes the scroll parallax;
+   `.poster__tilt` is the card surface and takes every 3D transform. Split
+   this way the two never fight over one element's transform. */
+.poster {
+  --accent: var(--green);
+  display: flex;
+  margin: 0;
+  perspective: 1100px;
+}
+
+.poster__tilt {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: clamp(0.7rem, 1vw, 0.95rem);
+  border: 1px solid var(--hair);
+  border-radius: 20px;
+  background:
+    radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 58%),
+    var(--cocoa-800);
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: border-color 0.6s, box-shadow 0.6s var(--ease-out);
+}
+.poster:hover .poster__tilt {
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  box-shadow: 0 50px 100px -30px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+/* the layers sit at different depths, so the card has parallax inside it
+   as it leans */
+.poster__frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 13px;
+  background: var(--cocoa-900);
+  transform: translateZ(28px);
+}
+
+/* specular sweep that tracks the pointer across the card */
+.poster__glare {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateZ(70px);
+  background: radial-gradient(
+    38% 30% at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.16),
+    rgba(255, 255, 255, 0.05) 42%,
+    transparent 68%
+  );
+}
+/* These posters carry their own type right up to the trim, so the frame
+   shows them whole — no overscan, no hover zoom. The card does the moving. */
+.poster__art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.poster__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 0.3rem;
+  padding: 1.15rem 0.55rem 0.4rem;
+  transform: translateZ(46px);
+}
+.poster__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1rem, 1.5vw, 1.24rem);
+  letter-spacing: -0.015em;
+}
+.poster__usage {
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+}
+
+/* ---- the CTA in every card ---- */
+.poster__cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-top: auto;
+  padding: 0.9rem 1.15rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  border-radius: 100px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  /* lifted toward cream so the darker accents (the green) still clear
+     contrast at this size — the border keeps the true accent */
+  color: color-mix(in srgb, var(--accent) 62%, var(--cream));
+  transition: background-color 0.35s, color 0.35s, border-color 0.35s;
+}
+.poster__cta svg {
+  width: 17px;
+  height: 17px;
+  flex: none;
+  transition: transform 0.35s var(--ease-out);
+}
+.poster__cta:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--cocoa-900);
+}
+.poster__cta:hover svg { transform: translateX(4px); }
+.poster__cta:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* only the top card gets a CTA margin when the body copy is short */
+.poster__usage + .poster__cta { margin-top: 1.15rem; }
+
+@media (max-width: 1000px) {
+  .posters__grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .posters__grid { grid-template-columns: 1fr; gap: 1.4rem; }
+  .poster__tilt, .poster__glare { border-radius: 16px; }
+}
+
+/* Touch has no hover to lean into, and the depth offsets only cost layers */
+@media (hover: none) {
+  .poster__frame, .poster__body, .poster__glare { transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .poster__frame, .poster__body, .poster__glare { transform: none; }
+  .poster { perspective: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .posters__track { animation: none; }
+}

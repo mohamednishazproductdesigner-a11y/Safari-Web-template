@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+
+# local Claude Code permissions, not project config
+.claude/settings.local.json
+
+# 38 MB screen capture, only needed to re-run tools/build-assets.sh.
+# Everything it produces (public/video/*) is committed, so the site builds
+# and deploys without it.
+safari-tattoo.webm

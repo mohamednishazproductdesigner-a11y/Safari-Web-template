@@ -1,0 +1,291 @@
+/* ============================================================
+   Hero — pinned, scroll-scrubbed break sequence
+   ============================================================ */
+
+.hero {
+  position: relative;
+  /* total scroll distance the pin consumes */
+  height: 480vh;
+}
+
+.hero__pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+}
+
+/* ---------------- background ---------------- */
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--cocoa-900);
+}
+.hero__glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 150vmax;
+  height: 150vmax;
+  translate: -50% -50%;
+  will-change: transform, opacity;
+}
+.hero__glow--cool {
+  background: radial-gradient(
+    circle at center,
+    rgba(47, 212, 114, 0.32) 0%,
+    rgba(18, 165, 81, 0.15) 26%,
+    rgba(11, 7, 5, 0) 58%
+  );
+}
+.hero__glow--warm {
+  opacity: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 178, 63, 0.34) 0%,
+    rgba(232, 130, 32, 0.16) 28%,
+    rgba(11, 7, 5, 0) 60%
+  );
+}
+/* the light burst that fires on the snap frame — a soft blown-out ring,
+   not a stroked circle, which just reads as stray UI */
+.hero__shock {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 60vmax;
+  height: 60vmax;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 236, 200, 0) 34%,
+    rgba(255, 205, 110, 0.5) 52%,
+    rgba(255, 170, 40, 0.16) 66%,
+    rgba(255, 170, 40, 0) 78%
+  );
+  filter: blur(14px);
+  opacity: 0;
+  scale: 0.2;
+  will-change: transform, opacity, scale;
+}
+
+/* ---------------- giant wordmark that snaps in two ---------------- */
+.hero__mark {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+.hero__mark-half {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  will-change: transform;
+}
+/* The wordmark is the real pack logo, not type dressed up to look like it —
+   the 3D extrude, the hand-cut letterforms and the gold gradient are all
+   baked into the artwork, so nothing has to be faked in CSS. */
+.hero__mark-word {
+  /* sits above the bar's diagonal so the word still reads through it */
+  position: relative;
+  display: block;
+  width: min(92vw, 1180px);
+  translate: 0 -13%;
+}
+
+.hero__mark-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* the unfilled state: the logo held back as a dark emboss */
+.hero__mark-img--ghost {
+  filter: brightness(0.32) saturate(0.35) contrast(1.15);
+  opacity: 0.85;
+}
+
+/* the real thing, wiped upward from the baseline as the reader scrolls.
+   --fill runs 100% (empty) → 0% (solid gold) off the hero timeline. */
+.hero__mark-img--fill {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(var(--fill, 100%) 0 0 0);
+  filter: drop-shadow(0 24px 50px rgba(0, 0, 0, 0.55));
+}
+
+.hero__mark-half--l { clip-path: inset(0 50% 0 0); }
+.hero__mark-half--r { clip-path: inset(0 0 0 50%); }
+
+/* ---------------- canvas ---------------- */
+.hero__canvas {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  display: block;
+  will-change: transform;
+}
+
+/* ---------------- copy ---------------- */
+.hero__copy {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  padding: calc(5rem + env(safe-area-inset-top)) var(--gutter) 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+
+.hero__eyebrow {
+  position: absolute;
+  top: 6.5rem;
+  left: var(--gutter);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+}
+.hero__eyebrow .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green-lit);
+  box-shadow: 0 0 0 0 rgba(47, 212, 114, 0.7);
+  animation: ping 2.4s var(--ease-out) infinite;
+}
+@keyframes ping {
+  0%   { box-shadow: 0 0 0 0 rgba(47, 212, 114, 0.6); }
+  70%  { box-shadow: 0 0 0 12px rgba(47, 212, 114, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(47, 212, 114, 0); }
+}
+
+.hero__beats {
+  position: relative;
+  max-width: 30ch;
+  min-height: 12rem;
+}
+.beat {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+}
+.beat.is-active { visibility: visible; }
+
+.beat__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.1rem, 5.4vw, 4.6rem);
+  line-height: 0.96;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+  text-shadow: 0 10px 60px rgba(0, 0, 0, 0.8);
+}
+.beat__sub {
+  margin-top: 1rem;
+  max-width: 34ch;
+  color: var(--cream-dim);
+  font-size: clamp(0.9rem, 1.1vw, 1.02rem);
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.9);
+}
+
+/* The opening beat is authored visible for the scrub, so its entrance is a
+   one-shot CSS animation that fires when the preloader lets go. Animations
+   outrank GSAP's inline styles, then hand back to them cleanly. */
+body.is-ready .beat[data-beat="0"] .beat__title { animation: beatIn 1s var(--ease-out) 0.15s backwards; }
+body.is-ready .beat[data-beat="0"] .beat__sub   { animation: beatIn 1s var(--ease-out) 0.3s backwards; }
+body.is-ready .hero__eyebrow                    { animation: beatIn 1s var(--ease-out) 0.05s backwards; }
+body.is-ready .hero__cue                        { animation: beatIn 1s var(--ease-out) 0.6s backwards; }
+
+@keyframes beatIn {
+  from { opacity: 0; transform: translateY(38px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------------- progress rail + scroll cue ---------------- */
+.hero__rail {
+  position: absolute;
+  z-index: 5;
+  right: var(--gutter);
+  top: 50%;
+  translate: 0 -50%;
+  width: 2px;
+  height: min(38vh, 320px);
+  background: var(--hair);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.hero__rail-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, var(--green-lit), var(--caramel-lit));
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+.hero__cue {
+  position: absolute;
+  z-index: 5;
+  bottom: 2rem;
+  left: 50%;
+  translate: -50% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+}
+.hero__cue-line {
+  width: 1px;
+  height: 46px;
+  background: linear-gradient(180deg, transparent, var(--cream-faint));
+  overflow: hidden;
+  position: relative;
+}
+.hero__cue-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--caramel);
+  animation: cue 1.9s var(--ease-io) infinite;
+}
+@keyframes cue {
+  0%   { transform: translateY(-100%); }
+  60%  { transform: translateY(100%); }
+  100% { transform: translateY(100%); }
+}
+.hero__cue-text {
+  font-size: 0.6rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+}
+
+@media (max-width: 860px) {
+  .hero { height: 420vh; }
+  .hero__eyebrow { top: 5.2rem; }
+  .hero__beats { max-width: none; min-height: 10rem; }
+  .hero__rail { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__eyebrow .dot,
+  .hero__cue-line::after { animation: none; }
+}
