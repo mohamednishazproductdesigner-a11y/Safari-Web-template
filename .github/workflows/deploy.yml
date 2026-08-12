@@ -1,8 +1,10 @@
 name: Deploy to GitHub Pages
 
+# Manual only. Netlify is the active host (see netlify.toml) and builds on its
+# own from every push; leaving this on `push` too would fail on every commit
+# until Pages is enabled. Run it from the Actions tab if you want Pages as
+# well, and add the `push` trigger back if it becomes the primary host.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:

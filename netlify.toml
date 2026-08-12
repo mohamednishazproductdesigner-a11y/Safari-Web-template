@@ -1,0 +1,33 @@
+# Netlify serves from the root of the site domain, so VITE_BASE is left unset
+# and vite.config.js falls back to '/'. (The GitHub Pages workflow is the one
+# that needs a sub-path — see .github/workflows/deploy.yml.)
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Vite fingerprints everything it emits into /assets — safe to cache forever.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# The frame sequence is 80 files fetched in one burst on load; caching it hard
+# is the difference between a one-off wait and a wait on every visit.
+[[headers]]
+  for = "/seq/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+[[headers]]
+  for = "/video/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"

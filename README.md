@@ -73,13 +73,19 @@ already tagged with the flavour it came from. `orders@example.com` is a
 
 ## Deploying
 
-Pushing to `main` builds and publishes to GitHub Pages via
-`.github/workflows/deploy.yml`. Nothing to configure beyond enabling Pages —
-see the checklist below.
+**Netlify** is the active host. `netlify.toml` carries the build command,
+publish directory and cache headers, so connecting the repo is the whole setup —
+Netlify builds `dist/` on every push to `main`. It serves from the root of the
+site domain, so no base path is involved.
 
-GitHub Pages serves a project repo from `user.github.io/<repo-name>/`, not from
-the root, so the workflow passes the repo name to Vite as `VITE_BASE`. Two
-things follow from that:
+**GitHub Pages** is also wired up, in `.github/workflows/deploy.yml`, but set to
+manual (`workflow_dispatch`) so it doesn't fail on every push while Netlify is
+the primary. Run it from the Actions tab if you want both; add the `push`
+trigger back if Pages becomes the main host.
+
+Pages serves a project repo from `user.github.io/<repo-name>/`, not from the
+root, so that workflow passes the repo name to Vite as `VITE_BASE`. Two things
+follow from that:
 
 - **Paths written in `index.html`** are rewritten by Vite automatically.
 - **Paths written in JS are not.** Anything referenced from code goes through
