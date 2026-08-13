@@ -64,12 +64,17 @@ export function initCraving() {
     }
   });
 
+  // Overshoot past 1: at exactly 1 the card's edge lands on the viewport edge,
+  // and any rounding leaves a one-pixel dark rule along the top and bottom that
+  // reads as a stray divider. Going a little beyond puts the seam off-screen.
+  // The shadow is kept (not faded out) so while the card is mid-size its edge
+  // falls off into the background instead of ending on a hard line.
   tl.fromTo(stage,
     { scale: () => (s0 = startScale()), borderRadius: () => `${SMALL_RADIUS / s0}px` },
     {
-      scale: 1,
+      scale: 1.04,
       borderRadius: '0px',
-      boxShadow: '0 0px 0px rgba(0,0,0,0)',
+      boxShadow: '0 60px 140px rgba(0,0,0,0.85)',
       ease: 'power2.inOut',
       duration: 0.5
     }, 0);

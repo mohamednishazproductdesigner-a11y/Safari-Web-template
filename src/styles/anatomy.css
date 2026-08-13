@@ -24,6 +24,8 @@
   position: absolute;
   inset: 0;
   background: radial-gradient(70% 60% at 50% 50%, rgba(232, 160, 32, 0.14), transparent 70%);
+  mask-image: var(--wash-fade);
+  -webkit-mask-image: var(--wash-fade);
   pointer-events: none;
 }
 

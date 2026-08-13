@@ -147,14 +147,23 @@ body.is-ready .nav { animation: navIn 0.9s var(--ease-out) 0.15s backwards; }
 }
 
 /* ---------------- outro ---------------- */
+/* No border-top: the wash below blends into Moments instead of drawing a
+   line across the join. */
 .outro {
   position: relative;
   padding: clamp(6rem, 16vh, 12rem) var(--gutter) 0;
-  background:
-    radial-gradient(120% 90% at 50% 0%, rgba(18, 165, 81, 0.16), transparent 62%),
-    var(--cocoa-900);
-  border-top: 1px solid var(--hair);
+  background: var(--cocoa-900);
 }
+.outro::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 90% at 50% 0%, rgba(18, 165, 81, 0.18), transparent 62%);
+  mask-image: var(--wash-fade);
+  -webkit-mask-image: var(--wash-fade);
+  pointer-events: none;
+}
+.outro__inner, .footer { position: relative; }
 .outro__inner { max-width: 980px; margin: 0 auto; text-align: center; }
 .outro__title {
   margin: 1.2rem 0 1.6rem;

@@ -24,6 +24,8 @@
   inset: 0;
   pointer-events: none;
   background: radial-gradient(58% 48% at 50% 50%, rgba(18, 165, 81, 0.2), transparent 70%);
+  mask-image: var(--wash-fade);
+  -webkit-mask-image: var(--wash-fade);
 }
 
 /* ---------------- the film ----------------
@@ -49,6 +51,22 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* Feathers the pin's own top and bottom into the page colour.
+   The stage is clipped by the pin, so once the film is full bleed the pin's
+   edge IS the film's edge — and when the pin releases and scrolls away, that
+   edge crosses the viewport as a hard rule against the next section. This has
+   to live on the pin, not the stage: the stage overshoots past the clip, so
+   its own edges are never the ones you actually see. */
+.craving__edges {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, var(--cocoa-900) 0%, rgba(11, 7, 5, 0.55) 2.5%, transparent 11%),
+    linear-gradient(0deg, var(--cocoa-900) 0%, rgba(11, 7, 5, 0.55) 2.5%, transparent 11%);
 }
 
 /* only earns its keep once the film is full bleed and the copy sits on it */

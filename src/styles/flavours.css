@@ -5,16 +5,24 @@
 .flavours { position: relative; }
 
 .flavours__intro {
+  position: relative;
   min-height: 70svh;
   display: grid;
   place-content: center;
   text-align: center;
   gap: 1rem;
   padding: clamp(5rem, 14vh, 9rem) var(--gutter);
-  background:
-    radial-gradient(90% 70% at 50% 100%, rgba(18, 165, 81, 0.14), transparent 65%),
-    var(--cocoa-900);
 }
+.flavours__intro::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(90% 70% at 50% 100%, rgba(18, 165, 81, 0.16), transparent 65%);
+  mask-image: var(--wash-fade);
+  -webkit-mask-image: var(--wash-fade);
+  pointer-events: none;
+}
+.flavours__intro > * { position: relative; }
 .flavours__title {
   font-family: var(--font-display);
   font-weight: 800;
@@ -51,6 +59,8 @@
   background:
     radial-gradient(100% 80% at 50% 46%, color-mix(in srgb, var(--accent) 34%, transparent), transparent 62%),
     var(--cocoa-900);
+  mask-image: var(--wash-fade);
+  -webkit-mask-image: var(--wash-fade);
   will-change: opacity;
 }
 
