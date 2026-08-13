@@ -103,9 +103,21 @@ VITE_BASE=/safari-chocolate/ npm run build
 ## Assets
 
 `tools/build-assets.sh` regenerates everything in `public/` from the source
-media. It documents the chroma-key settings — the important one is
-`similarity 0.10`: anything higher starts keying the dark crevices in the
-chocolate and punches holes in the matte.
+media. Two settings in there matter and neither is guessable:
+
+- **`similarity 0.10`** on the chroma key. Anything higher starts keying the
+  dark crevices in the chocolate and punches holes through the matte.
+- **The matte is eroded by one pixel.** That low similarity leaves a green rim
+  on the anti-aliased edge — pixels that are part subject, part backdrop, so
+  never green enough to key outright. `despill` is the obvious fix but it works
+  on the whole frame, and a brown-and-gold subject is full of legitimate green;
+  it drags the chocolate magenta. Shrinking the matte drops the contaminated
+  pixels instead, and a slight blur puts the soft edge back. Done at full 2500px
+  resolution, so it costs under half a pixel at delivery size — the flying
+  crumbs and caramel strings all survive.
+
+Alpha is stored losslessly (`-alpha_quality 100`); the wordmark is fully
+lossless since it carries the hero at up to 1180px wide.
 
 ```bash
 bash tools/build-assets.sh

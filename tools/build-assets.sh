@@ -24,14 +24,30 @@ FF=${FF:-ffmpeg}
 # caramel and chocolate hues away from the source.
 KEY="chromakey=0x2ABD52:0.10:0.03"
 
+# The key leaves a 1px green rim on the anti-aliased boundary — pixels that are
+# a blend of subject and backdrop, so they are never green enough to be keyed
+# outright. ffmpeg's `despill` is the obvious tool but it works on the whole
+# frame, and the subject here is brown and gold, i.e. full of legitimate green;
+# it drags the chocolate magenta.
+#
+# Shrinking the matte by one pixel drops those contaminated pixels instead. The
+# blur puts a soft anti-aliased edge back. Done at full 2500px resolution, so
+# by the time frames are scaled to 1200 it costs well under half a pixel — the
+# flying crumbs and the caramel strings all survive intact.
+CLEAN="format=yuva444p,split[c][m];[m]alphaextract,erosion,gblur=sigma=0.6[e];[c][e]alphamerge"
+
+# Store alpha losslessly. The colour channel can stay lossy, but a soft matte
+# is what sells the cutout, and it is cheap to keep it exact.
+WEBP_A="-c:v libwebp -alpha_quality 100 -compression_level 6"
+
 # Union bounding box of the subject across 0 – 2.3s, padded.
 CROP_SEQ="crop=1520:1090:470:196"
 
 echo "→ hero break sequence (80 frames)"
 rm -rf public/seq/break && mkdir -p public/seq/break
 "$FF" -y -v error -ss 0.05 -t 2.05 -i safari.webm \
-  -vf "fps=39,${KEY},${CROP_SEQ},scale=1200:-1,format=rgba" \
-  -c:v libwebp -quality 72 -compression_level 6 -preset picture \
+  -filter_complex "[0:v]fps=39,${KEY},${CLEAN},${CROP_SEQ},scale=1200:-1,format=rgba" \
+  $WEBP_A -quality 72 -preset picture \
   public/seq/break/%04d.webp
 
 # ---------------------------------------------------------------------------
@@ -64,20 +80,21 @@ CV="crop=3448:1740:0:40,scale=1920:-2"
 mkdir -p public/img
 
 echo "→ stills"
-# broken open, layers visible — used by the anatomy callouts and the posters
+# broken open, layers visible — used by the anatomy callouts
 "$FF" -y -v error -ss 1.05 -i safari.webm -frames:v 1 \
-  -vf "${KEY},crop=1460:1070:505:210,scale=1400:-1,format=rgba" \
-  -c:v libwebp -quality 84 -compression_level 6 public/img/bar-open.webp
+  -filter_complex "[0:v]${KEY},${CLEAN},crop=1460:1070:505:210,scale=1400:-1,format=rgba" \
+  $WEBP_A -quality 84 public/img/bar-open.webp
 
 # intact bar
 "$FF" -y -v error -ss 0.05 -i safari.webm -frames:v 1 \
-  -vf "${KEY},crop=1440:520:540:490,scale=1500:-1,format=rgba" \
-  -c:v libwebp -quality 84 -compression_level 6 public/img/bar-whole.webp
+  -filter_complex "[0:v]${KEY},${CLEAN},crop=1440:520:540:490,scale=1500:-1,format=rgba" \
+  $WEBP_A -quality 84 public/img/bar-whole.webp
 
-# 3D wordmark, lifted from the logo section of the clip
+# 3D wordmark — lossless, it carries the hero at up to 1180px wide and it is
+# only a few hundred KB
 "$FF" -y -v error -ss 3.6 -i safari.webm -frames:v 1 \
-  -vf "${KEY},crop=1180:320:670:574,scale=900:-1,format=rgba" \
-  -c:v libwebp -quality 90 -compression_level 6 public/img/logo-3d.webp
+  -filter_complex "[0:v]${KEY},${CLEAN},crop=1180:320:670:574,scale=1200:-1,format=rgba" \
+  -c:v libwebp -lossless 1 -compression_level 6 public/img/logo-3d.webp
 
 echo "→ packs"
 "$FF" -y -v error -i "Chocholate flavours/662814645e833bcab904df05_Safari-Peanut_Crisp_lfmxk.webp" \
